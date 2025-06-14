@@ -13,7 +13,7 @@ class PublicMenuController extends Controller
     {
         // Ambil semua menu item beserta relasi bahan-bahannya
         // Eager load ingredients dan pivot data quantity_needed
-        $menuItems = MenuItem::with('ingredients')->orderBy('name')->get();
+        $menuItems = MenuItem::with(['ingredients', 'category'])->orderBy('name')->get();
 
         $formattedMenus = $menuItems->map(function ($menuItem) {
             $isAvailable = true; // Asumsi awal: menu tersedia
@@ -48,6 +48,7 @@ class PublicMenuController extends Controller
                 'price' => (float) $menuItem->price, // Pastikan tipe data sesuai
                 'image_url' => $imageUrl, // URL lengkap ke gambar
                 'is_available' => $isAvailable, // Ini kuncinya!
+                'category' => $menuItem->category,
                 // Kamu bisa tambahkan data lain jika perlu, misal kategori
             ];
         });

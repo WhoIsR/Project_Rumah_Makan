@@ -12,7 +12,17 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+
+        // =======================================================
+        // ==> TAMBAHKAN KODE INI DI DALAM FUNGSI MIDDLEWARE <==
+        // =======================================================
+        // Ini adalah cara kita memberi "nama panggilan" ke middleware kita.
+        $middleware->alias([
+            'role' => \App\Http\Middleware\CheckRole::class,
+        ]);
+        // =======================================================
+        // =======================================================
+
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

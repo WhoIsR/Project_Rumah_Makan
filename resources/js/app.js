@@ -10,3 +10,12 @@ import CustomerLandingPage from './components/CustomerLandingPage.vue';
 const app = createApp({});
 app.component('customer-landing-page', CustomerLandingPage);
 app.mount('#app-customer'); // Pastikan ID ini unik dan akan kita buat di Blade
+
+// Import komponen kasir kita
+import PosPage from './components/PosPage.vue';
+
+// Cari div #pos-app, jika ada, maka jalankan komponen PosPage
+const posAppElement = document.getElementById('pos-app');
+if (posAppElement) {
+    createApp(PosPage).mount('#pos-app');
+}

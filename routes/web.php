@@ -1,37 +1,64 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Admin\IngredientController; // Sudah dibuat di Bagian II
-use App\Http\Controllers\Admin\MenuItemController;   // Sudah dibuat di Bagian II
-use App\Http\Controllers\Admin\CategoryController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\IngredientController;
+use App\Http\Controllers\Admin\MenuItemController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\UserController; // <-- INI YANG KURANG TADI!
 
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Di sinilah kita mendaftarkan semua alamat (route) untuk aplikasi kita.
+|
+*/
+
+// Halaman Landing Page untuk Customer (Publik, tidak perlu login)
 Route::get('/', function () {
-    // Ini akan jadi halaman untuk customer, kita atur nanti
-    return view('customer_landing'); // Buat file Blade ini nanti
+    return view('customer_landing');
 })->name('customer.landing');
 
-Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified'])->name('dashboard');
+// Grup route yang WAJIB login untuk mengaksesnya
+Route::middleware(['auth', 'verified'])->group(function () {
 
-Route::middleware('auth')->group(function () {
+    // Halaman Dashboard Utama (Semua role yang login bisa akses)
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Halaman Profile (Bawaan Breeze, semua role bisa akses)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Route untuk Admin Panel, dengan prefix 'admin' dan nama 'admin.'
-    Route::prefix('admin')->name('admin.')->middleware(['verified'])->group(function () { // Pastikan admin terverifikasi jika perlu
-        Route::get('/', function() { // Dashboard khusus admin jika ada
-            return redirect()->route('admin.menu-items.index'); // Atau redirect ke manajemen menu
-        })->name('dashboard');
-        Route::resource('categories', CategoryController::class);
+    // === Grup Khusus ADMIN (dijaga oleh middleware 'role:admin') ===
+    Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
+        Route::resource('users', UserController::class);
         Route::resource('ingredients', IngredientController::class);
         Route::resource('menu-items', MenuItemController::class);
-        // Route ini untuk mengambil menu berdasarkan kategori via API
-        Route::get('/categories/{category}/menu-items', [\App\Http\Controllers\Admin\CategoryController::class, 'getMenuItems'])->name('categories.menuItems');
-        // Route tambahan jika ada, misal untuk laporan, dll.
+        Route::resource('categories', CategoryController::class);
+        // Nanti route 'expenses' (pengeluaran) juga di sini
     });
+
+    // === Grup Khusus ATASAN (dan Admin juga boleh) ===
+    Route::middleware('role:admin,atasan')->prefix('laporan')->name('laporan.')->group(function () {
+        // Nanti semua route laporan di sini.
+        // Contoh: Route::get('/penjualan', [ReportController::class, 'sales'])->name('sales');
+    });
+
+    // === Grup Khusus KASIR (dan Admin juga boleh) ===
+    Route::middleware('role:admin,kasir')->group(function () {
+        Route::get('/kasir', function() {
+            return view('admin.kasir.index');
+        })->name('kasir.index');
+        // Nanti route untuk proses transaksi kasir di sini
+    });
+
 });
 
+
+// Route untuk otentikasi (login, register, dll)
 require __DIR__.'/auth.php';
+

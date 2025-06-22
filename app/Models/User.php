@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role', // Tambahkan role untuk menentukan jenis user
+        'profile_photo_path',
     ];
 
     /**

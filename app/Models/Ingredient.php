@@ -13,6 +13,7 @@ class Ingredient extends Model
         'name',
         'stock',
         'unit',
+        'supplier_id',
     ];
 
     /**
@@ -23,5 +24,13 @@ class Ingredient extends Model
         return $this->belongsToMany(MenuItem::class, 'menu_item_ingredients')
                     ->withPivot('quantity_needed')
                     ->withTimestamps();
+    }
+
+    /**
+     * Supplier yang menyediakan bahan ini.
+     */
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
     }
 }

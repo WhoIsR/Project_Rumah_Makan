@@ -2,11 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\SupplierController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\MenuItemController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\IngredientController;
-use App\Http\Controllers\Admin\MenuItemController;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\UserController; // <-- INI YANG KURANG TADI!
+use App\Http\Controllers\Admin\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +52,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('ingredients', IngredientController::class);
         Route::resource('menu-items', MenuItemController::class);
         Route::resource('categories', CategoryController::class);
+        Route::resource('suppliers', SupplierController::class);
         // Nanti route 'expenses' (pengeluaran) juga di sini
     });
 

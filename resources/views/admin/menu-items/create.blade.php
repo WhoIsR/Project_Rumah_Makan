@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center py-2">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
                 {{ __('Tambah Menu Baru') }}
             </h2>
         </div>

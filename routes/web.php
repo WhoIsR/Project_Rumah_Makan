@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CashierController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\MenuItemController;
 use App\Http\Controllers\Admin\SupplierController;
@@ -43,6 +44,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('categories/{category}/menu-items', [CategoryController::class, 'getMenuItems'])->name('categories.menu-items');
 
+        
         Route::resource('users', UserController::class);
         Route::resource('ingredients', IngredientController::class);
         Route::resource('menu-items', MenuItemController::class);
@@ -50,11 +52,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('suppliers', SupplierController::class);
         // Nanti route 'expenses' (pengeluaran) juga di sini
     });
-
+    
     // === Grup Khusus ATASAN (dan Admin juga boleh) ===
-    Route::middleware('role:admin,atasan')->prefix('laporan')->name('laporan.')->group(function () {
+    Route::middleware('role:admin,atasan')->prefix('admin')->name('admin.')->group(function () {
         // Nanti semua route laporan di sini.
         // Contoh: Route::get('/penjualan', [ReportController::class, 'sales'])->name('sales');
+        Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+        Route::get('/reports/daily', [ReportController::class, 'dailySales'])->name('reports.daily');
     });
 
     // === Grup Khusus KASIR (dan Admin juga boleh) ===

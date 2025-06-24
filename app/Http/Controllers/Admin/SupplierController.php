@@ -30,17 +30,15 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'contact_person' => 'nullable|string|max:255',
-            'phone_number' => 'nullable|string|max:20',
-            'address' => 'nullable|string',
-            'email' => 'nullable|email|unique:suppliers,email',
-        ]);
+        //
+    }
 
-        Supplier::create($validatedData);
-
-        return redirect()->route('admin.suppliers.index')->with('success', 'Supplier berhasil ditambahkan!');
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
     }
 
     /**

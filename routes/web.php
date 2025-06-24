@@ -1,13 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CashierController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Admin\SupplierController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\MenuItemController;
+use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\IngredientController;
-use App\Http\Controllers\Admin\UserController;
 
 // Halaman Landing Page untuk Customer (Publik, tidak perlu login)
 Route::get('/', function () {
@@ -35,8 +36,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // === Grup Khusus ADMIN (dijaga oleh middleware 'role:admin') ===
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
-        
-        Route::get('/', function() { return view('customer_landing');} )->name('customer.landing');
+
+        Route::get('/', function () {
+            return view('customer_landing');
+        })->name('customer.landing');
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('categories/{category}/menu-items', [CategoryController::class, 'getMenuItems'])->name('categories.menu-items');
 
@@ -56,15 +59,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // === Grup Khusus KASIR (dan Admin juga boleh) ===
     Route::middleware('role:admin,kasir')->group(function () {
-        Route::get('/kasir', function() {
-            return view('admin.kasir.index');
-        })->name('kasir.index');
+        
+        Route::get('/kasir', [CashierController::class, 'index'])->name('kasir.index');
+        Route::post('/place-order', [CashierController::class, 'placeOrder'])->name('kasir.placeOrder');
+        Route::get('/history', [CashierController::class, 'history'])->name('kasir.history');
+        Route::get('/orders/{order}', [CashierController::class, 'showOrder'])->name('kasir.show');
+
         // Nanti route untuk proses transaksi kasir di sini
     });
-
 });
 
 
 // Route untuk otentikasi (login, register, dll)
-require __DIR__.'/auth.php';
-
+require __DIR__ . '/auth.php';

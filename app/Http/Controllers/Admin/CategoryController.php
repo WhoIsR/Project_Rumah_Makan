@@ -44,7 +44,7 @@ class CategoryController extends Controller
 
         // Alihkan kembali ke halaman daftar dengan pesan sukses
         return redirect()->route('admin.categories.index')
-                         ->with('success', 'Kategori baru berhasil ditambahkan!');
+            ->with('success', 'Kategori baru berhasil ditambahkan!');
     }
 
     /**
@@ -71,7 +71,7 @@ class CategoryController extends Controller
 
         // Alihkan kembali ke halaman daftar dengan pesan sukses
         return redirect()->route('admin.categories.index')
-                         ->with('success', 'Kategori berhasil diperbarui!');
+            ->with('success', 'Kategori berhasil diperbarui!');
     }
 
     /**
@@ -82,7 +82,7 @@ class CategoryController extends Controller
         // Pengecekan cerdas: Jangan biarkan kategori dihapus jika masih ada menu yang memakainya.
         if ($category->menuItems()->count() > 0) {
             return redirect()->route('admin.categories.index')
-                             ->with('error', 'Kategori tidak bisa dihapus karena masih digunakan oleh beberapa menu.');
+                ->with('error', 'Kategori tidak bisa dihapus karena masih digunakan oleh beberapa menu.');
         }
 
         // Hapus kategori
@@ -90,15 +90,15 @@ class CategoryController extends Controller
 
         // Alihkan kembali ke halaman daftar dengan pesan sukses
         return redirect()->route('admin.categories.index')
-                         ->with('success', 'Kategori berhasil dihapus!');
+            ->with('success', 'Kategori berhasil dihapus!');
     }
 
     public function getMenuItems(Category $category)
-{
-    // Eager load relasi menuItems untuk kategori ini
-    $menuItems = $category->menuItems()->get();
+    {
+        // Eager load relasi menuItems untuk kategori ini
+        $menuItems = $category->menuItems()->get();
 
-    // Mengembalikan data sebagai respons JSON
-    return response()->json($menuItems);
-}
+        // Mengembalikan data sebagai respons JSON
+        return response()->json($menuItems);
+    }
 }

@@ -9,24 +9,21 @@ class Supplier extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'contact_person',
         'phone_number',
         'address',
-        'email', // Biarkan kolom email tetap ada
+        'email',
     ];
 
     /**
-     * Bahan baku yang disediakan oleh supplier ini.
+     * Bahan baku yang bisa disediakan oleh supplier ini. (Relasi Many-to-Many)
      */
     public function ingredients()
     {
-        return $this->hasMany(Ingredient::class);
+        return $this->belongsToMany(Ingredient::class, 'ingredient_supplier')
+                    ->withPivot('price', 'unit', 'last_supplied_at') // PERUBAHAN DI SINI
+                    ->withTimestamps();
     }
 }

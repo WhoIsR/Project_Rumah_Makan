@@ -4,7 +4,8 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Manajemen Pengguna') }}
             </h2>
-            <a href="{{ route('admin.users.create') }}" class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-600 active:bg-green-700 transition ease-in-out duration-150">
+            <a href="{{ route('admin.users.create') }}" 
+                class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg">
                 + Tambah Pengguna
             </a>
         </div>

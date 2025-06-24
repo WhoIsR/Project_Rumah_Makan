@@ -30,7 +30,7 @@
                                         Nama Supplier</th>
                                     <th scope="col"
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Kontak Person</th>
+                                        Nama Kontak</th>
                                     <th scope="col"
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Telepon</th>
@@ -39,6 +39,9 @@
                                         Email</th>
                                     <th scope="col"
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Alamat</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Aksi</th>
                                 </tr>
                             </thead>
@@ -53,7 +56,9 @@
                                             {{ $supplier->phone_number ?? '-' }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-gray-700">
                                             {{ $supplier->email ?? '-' }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <td class="px-6 py-4 whitespace-nowrap text-gray-700">
+                                            {{ $supplier->address ?? '-' }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <a href="{{ route('admin.suppliers.edit', $supplier) }}"
                                                 class="text-indigo-600 hover:text-indigo-900">Edit</a>
                                             <form action="{{ route('admin.suppliers.destroy', $supplier) }}"
@@ -68,7 +73,8 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="px-6 py-4 whitespace-nowrap text-center text-gray-500">
+                                        <td colspan="6"
+                                            class="px-6 py-4 whitespace-nowrap text-center justify-between text-sm text-gray-500">
                                             Belum ada data supplier.
                                         </td>
                                     </tr>

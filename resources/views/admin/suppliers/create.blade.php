@@ -41,7 +41,7 @@
 
                         <div class="mb-4">
                             <x-input-label for="email" :value="__('Email')" />
-                            <input id="email" type="email" name="email" value="{{ old('email') }}"
+                            <input id="email" type="email" name="email" value="{{ old('email') }}" placeholder="(Opsioanal)"
                                 class="mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
                             <x-input-error :messages="$errors->get('email')" class="mt-2" />
                         </div>

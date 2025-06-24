@@ -9,15 +9,6 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\IngredientController;
 use App\Http\Controllers\Admin\UserController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Di sinilah kita mendaftarkan semua alamat (route) untuk aplikasi kita.
-|
-*/
-
 // Halaman Landing Page untuk Customer (Publik, tidak perlu login)
 Route::get('/', function () {
     return view('customer_landing');
@@ -44,10 +35,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // === Grup Khusus ADMIN (dijaga oleh middleware 'role:admin') ===
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
-        Route::get('/', function() {
-            return view('customer_landing');
-        })->name('customer.landing');
+        
+        Route::get('/', function() { return view('customer_landing');} )->name('customer.landing');
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('categories/{category}/menu-items', [CategoryController::class, 'getMenuItems'])->name('categories.menu-items');
+
         Route::resource('users', UserController::class);
         Route::resource('ingredients', IngredientController::class);
         Route::resource('menu-items', MenuItemController::class);

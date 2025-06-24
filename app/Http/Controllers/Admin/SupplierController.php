@@ -22,7 +22,7 @@ class SupplierController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.suppliers.create');
     }
 
     /**
@@ -30,38 +30,56 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'contact_person' => 'nullable|string|max:255',
+            'phone_number' => 'nullable|string|max:20',
+            'address' => 'nullable|string',
+            'email' => 'nullable|email|unique:suppliers,email',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        Supplier::create($validatedData);
+
+        return redirect()->route('admin.suppliers.index')->with('success', 'Supplier berhasil ditambahkan!');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Supplier $supplier)
     {
-        //
+        return view('admin.suppliers.edit', compact('supplier'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Supplier $supplier)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'contact_person' => 'nullable|string|max:255',
+            'phone_number' => 'nullable|string|max:20',
+            'address' => 'nullable|string',
+            'email' => 'nullable|email|unique:suppliers,email,' . $supplier->id, // unique kecuali untuk id saat ini
+        ]);
+
+        $supplier->update($validatedData);
+
+        return redirect()->route('admin.suppliers.index')->with('success', 'Supplier berhasil diperbarui!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Supplier $supplier)
     {
-        //
+        try {
+            $supplier->delete();
+            return redirect()->route('admin.suppliers.index')->with('success', 'Supplier berhasil dihapus!');
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Tangani kasus jika ada bahan baku yang terhubung dengan supplier ini
+            return redirect()->route('admin.suppliers.index')->with('error', 'Gagal menghapus supplier. Pastikan tidak ada bahan baku yang terhubung dengan supplier ini.');
+        }
     }
 }

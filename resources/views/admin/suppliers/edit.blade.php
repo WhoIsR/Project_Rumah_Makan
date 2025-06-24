@@ -13,21 +13,21 @@
                         @method('PUT')
                         <div class="mb-4">
                             <x-input-label for="name" :value="__('Nama Supplier')" />
-                            <input id="name" type="text" name="name" :value="old('name', $supplier->name)" required autofocus
+                            <input id="name" type="text" name="name" value="{{ old('name', $supplier->name) }}" required autofocus
                                 class="mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
                             <x-input-error :messages="$errors->get('name')" class="mt-2" />
                         </div>
 
                         <div class="mb-4">
                             <x-input-label for="contact_person" :value="__('Kontak Person')" />
-                            <input id="contact_person" type="text" name="contact_person" :value="old('contact_person', $supplier->contact_person)"
+                            <input id="contact_person" type="text" name="contact_person" value="{{ old('contact_person', $supplier->contact_person) }}"
                                 class="mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
                             <x-input-error :messages="$errors->get('contact_person')" class="mt-2" />
                         </div>
 
                         <div class="mb-4">
                             <x-input-label for="phone_number" :value="__('Nomor Telepon')" />
-                            <input id="phone_number" type="text" name="phone_number" :value="old('phone_number', $supplier->phone_number)"
+                            <input id="phone_number" type="text" name="phone_number" value="{{ old('phone_number', $supplier->phone_number) }}"
                                 class="mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
                             <x-input-error :messages="$errors->get('phone_number')" class="mt-2" />
                         </div>
@@ -41,7 +41,7 @@
 
                         <div class="mb-4">
                             <x-input-label for="email" :value="__('Email')" />
-                            <input id="email" type="email" name="email" :value="old('email', $supplier->email)"
+                            <input id="email" type="email" name="email" value="{{ old('email', $supplier->email) }}" placeholder="(Opsional)"
                                 class="mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
                             <x-input-error :messages="$errors->get('email')" class="mt-2" />
                         </div>

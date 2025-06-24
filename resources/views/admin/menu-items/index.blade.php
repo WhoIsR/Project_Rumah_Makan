@@ -30,7 +30,7 @@
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gambar</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Harga</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
@@ -45,7 +45,7 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{{ $menuItem->name }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">Rp {{ number_format($menuItem->price, 0, ',', '.') }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <a href="{{ route('admin.menu-items.edit', $menuItem) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
                                         {{-- Form untuk tombol Hapus --}}
                                         <form action="{{ route('admin.menu-items.destroy', $menuItem) }}" method="POST" class="inline-block ml-4" onsubmit="return confirm('Yakin ingin menghapus menu ini?');">

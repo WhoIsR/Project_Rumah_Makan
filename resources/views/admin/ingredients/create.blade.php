@@ -1,16 +1,13 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
-                {{ __('Tambah Bahan Baku Baru') }}
-            </h2>
-
-        </div>
-    </x-slot>
-
     <div class="py-12">
-        <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="max-w-xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+                {{-- Card Header --}}
+                <div class="px-6 py-4 bg-white border-b border-gray-200 justify-between flex items-center">
+                    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                        {{ isset($ingredient) ? __('Edit Bahan Baku') : __('Tambah Bahan Baku') }}
+                    </h2>
+                </div>
                 <div class="p-6 bg-white border-b border-gray-200">
                     {{-- Form untuk mengirim data bahan baru --}}
                     <form method="POST" action="{{ route('admin.ingredients.store') }}">

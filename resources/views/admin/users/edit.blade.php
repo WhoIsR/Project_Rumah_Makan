@@ -1,13 +1,13 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
-            {{ __('Edit Pengguna: ') . $user->name }}
-        </h2>
-    </x-slot>
-
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+                {{-- Card Header --}}
+                <div class="px-6 py-4 bg-white border-b border-gray-200 justify-between flex items-center">
+                    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                        {{ __('Edit Pengguna')  }}
+                    </h2>
+                </div>
                 <div class="p-6 md:p-8 bg-white border-b border-gray-200">
                     @if ($errors->any())
                         <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
@@ -56,7 +56,7 @@
                                 <div class="pb-4">
                                     <label for="role" class="block font-medium text-sm text-gray-700">Role / Jabatan</label>
                                     <select name="role" id="role"
-                                        class="mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                                        class="p-2 mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
                                         <option value="kasir" {{ old('role', $user->role) == 'kasir' ? 'selected' : '' }}>Kasir</option>
                                         <option value="atasan" {{ old('role', $user->role) == 'atasan' ? 'selected' : '' }}>Atasan</option>
                                         <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>

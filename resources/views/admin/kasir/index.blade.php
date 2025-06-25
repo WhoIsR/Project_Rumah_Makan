@@ -1,14 +1,13 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
-            {{ __('Point of Sale (POS)') }}
-        </h2>
-    </x-slot>
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-
+            <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+                {{-- Card Header --}}
+                <div class="px-6 py-4 bg-white border-b border-gray-200 justify-between flex items-center">
+                    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                        {{ __('Daftar Menu') }}
+                    </h2>
+                </div>
                 @if (session('success'))
                     <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4" role="alert">
                         <p>{{ session('success') }}</p>
@@ -24,9 +23,8 @@
                     <ul class="list-disc list-inside"></ul>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
                     <div class="md:col-span-2">
-                        <h3 class="text-lg font-semibold mb-4">Daftar Menu</h3>
                         <div class="flex space-x-2 mb-4 overflow-x-auto pb-2">
                             <button data-category-id="all"
                                 class="category-filter-btn px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors whitespace-nowrap">Semua</button>
@@ -66,7 +64,7 @@
                             <label for="order_type" class="block text-sm font-medium text-gray-700">Jenis
                                 Pesanan:</label>
                             <select id="order_type" name="order_type"
-                                class="mt-1 block w-full rounded-md shadow-sm border-gray-300">
+                                class="p-2 mt-1 block w-full rounded-md shadow-sm border-gray-300">
                                 <option value="dine_in">Makan di Tempat</option>
                                 <option value="take_away">Bawa Pulang</option>
                                 <option value="delivery">Delivery</option>

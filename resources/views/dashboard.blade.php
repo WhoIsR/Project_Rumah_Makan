@@ -1,17 +1,9 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
-                {{ __('Dashboard') }}
-            </h2>
-        </div>
-    </x-slot>
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
             <!-- Salam Sambutan -->
-            <div class="bg-white shadow-sm sm:rounded-lg mb-6">
+            <div class="bg-white shadow-sm rounded-xl mb-6">
                 <div class="p-6 text-gray-900">
                     <h3 class="text-xl font-semibold">Selamat Datang Kembali, {{ Auth::user()->name }}! 👋</h3>
                     <p class="text-gray-600 mt-1">Ini adalah ringkasan dari restoran Anda hari ini.</p>
@@ -90,7 +82,7 @@
             <!-- Bagian Daftar Menu Terbaru dan Stok Menipis -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Kolom Daftar Menu Terbaru -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="bg-white overflow-hidden shadow-sm rounded-xl">
                     <div class="p-6">
                         <h3 class="text-xl font-semibold mb-4 border-b pb-3 text-gray-800">🍽️ Menu Baru Ditambahkan
                         </h3>
@@ -115,7 +107,7 @@
                     </div>
                 </div>
                 <!-- Kolom Daftar Stok Menipis -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="bg-white overflow-hidden shadow-sm rounded-xl">
                     <div class="p-6">
                         <h3 class="text-xl font-semibold mb-4 border-b pb-3 text-gray-800">⚠️ Stok Bahan Menipis</h3>
                         <ul class="space-y-3 mt-4">

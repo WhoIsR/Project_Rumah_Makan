@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\MenuItemController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\IngredientController;
+use App\Http\Controllers\Api\KasirController;
+use App\Http\Controllers\PurchaseTransactionController;
 
 // Halaman Landing Page untuk Customer (Publik, tidak perlu login)
 Route::get('/', function () {
@@ -44,7 +46,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('categories/{category}/menu-items', [CategoryController::class, 'getMenuItems'])->name('categories.menu-items');
 
-        
+        Route::resource('purchases', PurchaseTransactionController::class);
+        Route::get('purchases/{purchase}/print', [PurchaseTransactionController::class, 'print'])->name('purchases.print');
+        Route::post('ingredients-ajax', [IngredientController::class, 'storeAjax'])->name('ingredients.store.ajax');
+
         Route::resource('users', UserController::class);
         Route::resource('ingredients', IngredientController::class);
         Route::resource('menu-items', MenuItemController::class);
@@ -52,18 +57,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('suppliers', SupplierController::class);
         // Nanti route 'expenses' (pengeluaran) juga di sini
     });
-    
+
     // === Grup Khusus ATASAN (dan Admin juga boleh) ===
     Route::middleware('role:admin,atasan')->prefix('admin')->name('admin.')->group(function () {
         // Nanti semua route laporan di sini.
         // Contoh: Route::get('/penjualan', [ReportController::class, 'sales'])->name('sales');
         Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
         Route::get('/reports/daily', [ReportController::class, 'dailySales'])->name('reports.daily');
+        Route::get('/reports/purchases', [ReportController::class, 'purchaseReport'])->name('reports.purchases');
+        Route::get('/reports/profit-loss', [ReportController::class, 'profitAndLoss'])->name('reports.profit_loss');
     });
 
     // === Grup Khusus KASIR (dan Admin juga boleh) ===
     Route::middleware('role:admin,kasir')->group(function () {
-        
+
+        Route::get('/kasir/data', [KasirController::class, 'getData'])->name('api.kasir.data');
+        Route::post('/kasir/orders', [KasirController::class, 'storeOrder'])->name('api.kasir.storeOrder');
+        Route::get('/kasir/orders/{order}/receipt', [CashierController::class, 'printReceipt'])->name('kasir.receipt');
+
         Route::get('/kasir', [CashierController::class, 'index'])->name('kasir.index');
         Route::post('/place-order', [CashierController::class, 'placeOrder'])->name('kasir.placeOrder');
         Route::get('/history', [CashierController::class, 'history'])->name('kasir.history');

@@ -12,9 +12,16 @@ class Ingredient extends Model
     protected $fillable = [
         'name',
         'stock',
-        'unit',
-        'supplier_id',
+        'base_unit_id', // 'unit' dan 'supplier_id' sudah dihapus
     ];
+
+    /**
+     * Relasi ke satuan dasar.
+     */
+    public function baseUnit()
+    {
+        return $this->belongsTo(Unit::class, 'base_unit_id');
+    }
 
     /**
      * Menu item yang menggunakan bahan ini.
@@ -24,13 +31,5 @@ class Ingredient extends Model
         return $this->belongsToMany(MenuItem::class, 'menu_item_ingredients')
                     ->withPivot('quantity_needed')
                     ->withTimestamps();
-    }
-
-    /**
-     * Supplier yang menyediakan bahan ini.
-     */
-    public function supplier()
-    {
-        return $this->belongsTo(Supplier::class);
     }
 }

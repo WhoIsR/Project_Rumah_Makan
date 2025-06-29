@@ -22,6 +22,12 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin',
         ]);
 
+        $this->call([
+            UnitSeeder::class,
+            SupplierSeeder::class,
+            CategorySeeder::class,
+        ]);
+
         // $this->call([
         //     SupplierSeeder::class,
         //     CategorySeeder::class,

@@ -50,7 +50,6 @@
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="text-sm font-medium text-gray-900">#{{ $order->id }}</div>
                                                 <div class="text-sm text-gray-600">{{ ucfirst(str_replace('_', ' ', $order->order_type)) }}
-                                                     @if ($order->table_number) (Meja: {{ $order->table_number }}) @endif
                                                 </div>
                                                 {{-- FIX: Show hidden data on mobile --}}
                                                 <div class="md:hidden text-xs text-gray-500 mt-1">

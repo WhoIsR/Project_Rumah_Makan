@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Models\PurchaseTransactionDetail; // <-- Tambahkan ini
+use App\Observers\PurchaseTransactionDetailObserver; // <-- Tambahkan ini
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Daftarkan Observer secara manual di sini
+        PurchaseTransactionDetail::observe(PurchaseTransactionDetailObserver::class);
     }
 }

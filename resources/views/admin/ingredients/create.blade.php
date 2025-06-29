@@ -5,7 +5,7 @@
                 {{-- Card Header --}}
                 <div class="px-6 py-4 bg-white border-b border-gray-200 justify-between flex items-center">
                     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                        {{ isset($ingredient) ? __('Edit Bahan Baku') : __('Tambah Bahan Baku') }}
+                        {{ __('Tambah Bahan Baku') }}
                     </h2>
                 </div>
                 <div class="p-6 bg-white border-b border-gray-200">
@@ -17,8 +17,8 @@
                         <div>
                             <label for="name" class="block font-medium text-sm text-gray-700">Nama Bahan</label>
                             <input id="name"
-                                class="mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
-                                type="text" name="name" :value="old('name')" required autofocus />
+                                   class="mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                                   type="text" name="name" value="{{ old('name') }}" required autofocus />
                             <x-input-error :messages="$errors->get('name')" class="mt-2" />
                         </div>
 
@@ -26,25 +26,29 @@
                         <div class="mt-4">
                             <label for="stock" class="block font-medium text-sm text-gray-700">Stok Awal</label>
                             <input id="stock"
-                                class="mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
-                                type="number" name="stock" :value="old('stock', 0)" required />
+                                   class="mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                                   type="number" name="stock" value="{{ old('stock', 0) }}" required />
                             <x-input-error :messages="$errors->get('stock')" class="mt-2" />
                         </div>
 
-                        <!-- Satuan -->
+                        <!-- Satuan (Dropdown) -->
                         <div class="mt-4">
-                            <label for="unit" class="block font-medium text-sm text-gray-700">Satuan (Contoh: gram,
-                                pcs, ml)</label>
-                            <input id="unit"
-                                class="mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
-                                type="text" name="unit" :value="old('unit')" required />
-                            <x-input-error :messages="$errors->get('unit')" class="mt-2" />
+                            <label for="base_unit_id" class="block font-medium text-sm text-gray-700">Unit Standar</label>
+                            <select name="base_unit_id" id="base_unit_id" class="p-2 mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" required>
+                                <option value="">-- Pilih Unit --</option>
+                                @foreach($units as $unit)
+                                    <option value="{{ $unit->id }}" {{ old('base_unit_id') == $unit->id ? 'selected' : '' }}>
+                                        {{ $unit->name }} ({{ $unit->symbol }})
+                                    </option>
+                                @endforeach
+                            </select>
+                            <x-input-error :messages="$errors->get('base_unit_id')" class="mt-2" />
                         </div>
 
                         <div class="flex items-center justify-end mt-6">
                             <a href="{{ route('admin.ingredients.index') }}"
-                                class="text-sm text-gray-600 hover:text-gray-900 mr-4">
-                                {{ __('Batal') }}
+                                class="mr-2 inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
+                                Batal
                             </a>
                             <x-primary-button>
                                 {{ __('Simpan') }}

@@ -13,7 +13,6 @@ class Order extends Model
         'change_amount',
         'status',
         'order_type',
-        'table_number',
     ];
     public function user() { return $this->belongsTo(User::class); }
     public function items() { return $this->hasMany(OrderItem::class); }

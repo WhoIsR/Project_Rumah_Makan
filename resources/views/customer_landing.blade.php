@@ -37,7 +37,7 @@
     <header class="bg-white/90 backdrop-blur-lg shadow-sm sticky top-0 z-50">
       <div class="container mx-auto px-6 py-4 flex justify-between items-center">
         <h1 class="text-2xl md:text-3xl font-bold" style="font-family: 'Playfair Display', serif;">Warung Kita</h1>
-        <nav class="hidden md:flex space-x-8 items-center text-sm font-semibold tracking-wider uppercase">
+        <nav class="hidden md:flex mt-2 space-x-8 items-center text-sm font-semibold tracking-wider uppercase">
           <a href="#keunggulan" class="nav-link">Keunggulan</a>
           <a href="#menu" class="nav-link">Menu</a>
           <a href="#testimoni" class="nav-link">Testimoni</a>

@@ -1,11 +1,8 @@
 <template>
   <div class="min-h-screen bg-stone-100 font-sans antialiased">
-
-    
-
     <main>
       <!-- HERO SECTION -->
-      <section class="h-[90vh] bg-cover bg-center bg-fixed relative overflow-hidden flex items-center justify-center text-center text-white" style="background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1770&auto=format&fit=crop');">
+      <section class="h-[100vh] bg-cover bg-center bg-fixed relative overflow-hidden flex items-center justify-center text-center text-white" style="background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1770&auto=format&fit=crop');">
         <div class="absolute inset-0 bg-black/60 z-0"></div>
 
         <!-- Teks Berjalan Diagonal 1 -->

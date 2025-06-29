@@ -15,31 +15,8 @@
             font-family: 'Inter', sans-serif;
         }
 
-        .auth-container {
-            perspective: 1200px;
-            transform-style: preserve-3d;
-            margin: 0 auto;
-            margin-top: 10rem;
-        }
-
-        .form-card {
-            transform-style: preserve-3d;
-            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            backface-visibility: hidden;
-        }
-
-        .form-card.flipped {
-            transform: rotateY(180deg);
-        }
-
-        .form-side {
-            backface-visibility: hidden;
-            transition: all 0.6s ease;
-        }
-
-        .form-back {
-            transform: rotateY(180deg);
-        }
+        /* Dihapus: CSS untuk .auth-container, .form-card, .form-card.flipped, .form-side, .form-back */
+        /* CSS yang tidak lagi diperlukan untuk animasi flip telah dihapus */
 
         .floating-shapes {
             animation: float 8s ease-in-out infinite;
@@ -97,74 +74,14 @@
             }
         }
 
-        /* OVERRIDE DAN KUSTOMISASI UNTUK INPUT GROUP */
+        /* OVERRIDE DAN KUSTOMISASI UNTUK INPUT GROUP (Tetap digunakan) */
         .input-group {
             position: relative;
-            margin-bottom: 1.5rem; /* Menambahkan margin bawah */
-        }
-
-        .input-group input {
-            /* Sesuaikan dengan gaya input template */
-            width: 100%;
-            padding: 1rem 1rem; /* Sesuaikan padding */
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 0.5rem; /* rounded-lg */
-            color: white;
-            padding-top: 1.5rem; /* Tambah padding atas untuk label floating */
-            padding-bottom: 0.75rem; /* Padding bawah */
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        .input-group input:focus {
-            border-color: #8b5cf6; /* purple-500 */
-            background: rgba(255, 255, 255, 0.15); /* white/15 */
-        }
-
-        .input-group label {
-            position: absolute;
-            left: 1rem;
-            top: 0.75rem; /* Sesuaikan posisi awal label */
-            color: #9ca3af; /* gray-400 */
-            pointer-events: none;
-            transition: all 0.3s ease;
-            transform-origin: left top;
-        }
-
-        .input-group input:focus + label,
-        .input-group input:not(:placeholder-shown):valid + label, /* :valid agar tidak melayang jika invalid */
-        .input-group input.has-value + label /* Kustom untuk menangani old() value */
-        {
-            transform: translateY(-0.75rem) scale(0.8); /* Sesuaikan transform */
-            color: #8b5cf6;
+            margin-bottom: 1.5rem;
         }
         
-        /* Tambahan untuk .input-error */
-        .input-group .text-red-600 {
-            color: #ef4444; /* red-600 */
-            font-size: 0.875rem; /* text-sm */
-            margin-top: 0.5rem; /* mt-2 */
-        }
-
-        /* Pastikan checkbox dan remember me sesuai */
-        .remember-me-group label {
-            display: flex;
-            align-items: center;
-            font-size: 0.875rem; /* text-sm */
-            color: #9ca3af; /* gray-400 */
-        }
-
-        .remember-me-group input[type="checkbox"] {
-            margin-right: 0.5rem; /* mr-2 */
-            border-radius: 0.25rem; /* rounded */
-            border-color: #4b5563; /* gray-600 */
-            background-color: #1f2937; /* gray-800 */
-            color: #8b5cf6; /* purple-500 */
-            box-shadow: none; /* shadow-sm bisa di override */
-            /* Tailwind focus ring classes will handle focus styles */
-        }
-
+        /* ... (CSS lain yang tidak berhubungan dengan flip tetap sama) ... */
+        
         .glass-effect {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px);
@@ -181,7 +98,7 @@
             background: rgba(17, 24, 39, 0.95);
             border-radius: 14px;
         }
-
+        
         .social-btn {
             transition: all 0.3s ease;
             transform: translateY(0);
@@ -220,15 +137,9 @@
         }
 
         @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7);
-            }
-            70% {
-                box-shadow: 0 0 0 10px rgba(139, 92, 246, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
-            }
+            0% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(139, 92, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); }
         }
 
         .slide-in {
@@ -236,20 +147,14 @@
         }
 
         @keyframes slideIn {
-            0% {
-                transform: translateY(30px);
-                opacity: 0;
-            }
-            100% {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            0% { transform: translateY(30px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
         }
 
         .glow-effect {
             box-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
         }
-
+        
         .loading {
             animation: spin 1s linear infinite;
         }
@@ -285,176 +190,71 @@
         <div id="particles-container" class="absolute inset-0"></div>
     </div>
 
-    <div class="min-h-screen p-4">
-        <div class="auth-container w-full max-w-md">
-            <div id="formCard" class="form-card relative">
-                <div class="form-side form-front absolute inset-0">
-                    <div class="gradient-border glow-effect">
-                        <div class="gradient-border-inner p-8">
-                            <div class="text-center mb-8 slide-in">
-                                <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4 pulse">
-                                    <i class="fas fa-lock text-white text-2xl"></i>
-                                </div>
-                                <h2 class="text-3xl font-bold text-white mb-2">Welcome</h2>
-                                <p class="text-gray-400">Sign in to your account</p>
-                            </div>
-
-                            {{-- Laravel Session Status Messages --}}
-                            @if (session('status'))
-                                <div class="session-status success slide-in" style="animation-delay: 0.05s;">
-                                    {{ session('status') }}
-                                </div>
-                            @endif
-                            @if ($errors->any())
-                                <div class="session-status error slide-in" style="animation-delay: 0.05s;">
-                                    {{ __('Whoops! Something went wrong.') }}
-                                    <ul class="mt-3 list-disc list-inside text-sm">
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
-
-                            <form id="loginForm" method="POST" action="{{ route('login') }}" class="space-y-6">
-                                @csrf
-
-                                <div>
-                                    <x-input-label for="email" :value="__('Email')" />
-                                    <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-                                    <x-input-error :messages="$errors->get('email')" class="mt-2" />
-                                </div>
-
-                                <!-- Password -->
-                                <div class="mt-4">
-                                    <x-input-label for="password" :value="__('Password')" />
-
-                                    <x-text-input id="password" class="block mt-1 w-full"
-                                                    type="password"
-                                                    name="password"
-                                                    required autocomplete="current-password" />
-
-                                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
-                                </div>
-
-                                <div class="flex items-center justify-between slide-in remember-me-group" style="animation-delay: 0.4s;">
-                                    <label class="flex items-center text-sm text-gray-400">
-                                        <input id="remember_me" type="checkbox" name="remember" class="mr-2 rounded border-gray-600 bg-gray-800 text-purple-500 focus:ring-purple-500" {{ old('remember') ? 'checked' : '' }}>
-                                        Remember me
-                                    </label>
-                                    @if (Route::has('password.request'))
-                                        <a href="{{ route('password.request') }}" class="text-sm text-purple-400 hover:text-purple-300 transition-colors">Forgot password?</a>
-                                    @endif
-                                </div>
-
-                                <button type="submit" class="ripple-effect w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 slide-in" style="animation-delay: 0.5s;">
-                                    <span class="flex items-center justify-center">
-                                        {{-- <i class="fas fa-sign-in-alt mr-2"></i> --}}
-                                        Sign In
-                                    </span>
-                                </button>
-                            </form>
-
-                            {{-- <div class="text-center mt-6 slide-in" style="animation-delay: 0.6s;">
-                                <p class="text-gray-400">Don't have an account? 
-                                    <button onclick="flipCard()" class="text-purple-400 hover:text-purple-300 transition-colors font-semibold">Sign up</button>
-                                </p>
-                            </div> --}}
+    <div class="min-h-screen p-4 flex items-center justify-center">
+        <div class="w-full max-w-md">
+            <div class="gradient-border glow-effect">
+                <div class="gradient-border-inner p-8">
+                    <div class="text-center mb-8 slide-in">
+                        <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4 pulse">
+                            <i class="fas fa-lock text-white text-2xl"></i>
                         </div>
+                        <h2 class="text-3xl font-bold text-white mb-2">Welcome</h2>
+                        <p class="text-gray-400">Sign in to your account</p>
                     </div>
-                </div>
 
-                <div class="form-side form-back absolute inset-0">
-                    <div class="gradient-border glow-effect">
-                        <div class="gradient-border-inner p-8">
-                            <div class="text-center mb-8">
-                                <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center mx-auto mb-4 pulse">
-                                    <i class="fas fa-user-plus text-white text-2xl"></i>
-                                </div>
-                                <h2 class="text-3xl font-bold text-white mb-2">Create Account</h2>
-                                <p class="text-gray-400">Join us today</p>
-                            </div>
-
-                            {{-- Laravel Session Status Register (Jika ada) --}}
-                            @if (session('register_status')) {{-- Gunakan nama session berbeda --}}
-                                <div class="session-status success slide-in" style="animation-delay: 0.05s;">
-                                    {{ session('register_status') }}
-                                </div>
-                            @endif
-                            @if ($errors->register->any()) {{-- Asumsi errors.register exist --}}
-                                <div class="session-status error slide-in" style="animation-delay: 0.05s;">
-                                    {{ __('Whoops! Something went wrong with registration.') }}
-                                    <ul class="mt-3 list-disc list-inside text-sm">
-                                        @foreach ($errors->register->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
-
-                            <form id="registerFormBackend" method="POST" action="{{ route('register') }}" class="space-y-4">
-                                @csrf
-
-                                <div class="input-group">
-                                    <input type="text" id="name" name="name" placeholder=" "
-                                           class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-transparent focus:outline-none focus:border-blue-500 focus:bg-white/15 transition-all duration-300 {{ $errors->register->has('name') ? 'border-red-500' : '' }}"
-                                           value="{{ old('name') }}" required autocomplete="name"
-                                           @if(old('name')) class="has-value" @endif
-                                    >
-                                    <label for="name" class="absolute left-4 top-3 text-gray-400 pointer-events-none">Full Name</label>
-                                    {{-- <x-input-error :messages="$errors->register->get('name')" class="mt-2"/> --}}
-                                </div>
-
-                                <div class="input-group">
-                                    <input type="email" id="registerEmail" name="email" placeholder=" "
-                                           class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-transparent focus:outline-none focus:border-blue-500 focus:bg-white/15 transition-all duration-300 {{ $errors->register->has('email') ? 'border-red-500' : '' }}"
-                                           value="{{ old('email') }}" required autocomplete="email"
-                                           @if(old('email')) class="has-value" @endif
-                                    >
-                                    <label for="registerEmail" class="absolute left-4 top-3 text-gray-400 pointer-events-none">Email Address</label>
-                                    {{-- <x-input-error :messages="$errors->register->get('email')" class="mt-2"/> --}}
-                                </div>
-
-                                <div class="input-group">
-                                    <input type="password" id="registerPasswordBackend" name="password" placeholder=" "
-                                           class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-transparent focus:outline-none focus:border-blue-500 focus:bg-white/15 transition-all duration-300 {{ $errors->register->has('password') ? 'border-red-500' : '' }}"
-                                           required autocomplete="new-password"
-                                    >
-                                    <label for="registerPasswordBackend" class="absolute left-4 top-3 text-gray-400 pointer-events-none">Password</label>
-                                    <button type="button" class="absolute right-3 top-3 text-gray-400 hover:text-white transition-colors" onclick="togglePassword('registerPasswordBackend')">
-                                        <i class="fas fa-eye" id="registerPasswordBackendIcon"></i>
-                                    </button>
-                                </div>
-
-                                <div class="input-group">
-                                    <input type="password" id="password_confirmation" name="password_confirmation" placeholder=" "
-                                           class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-transparent focus:outline-none focus:border-blue-500 focus:bg-white/15 transition-all duration-300"
-                                           required autocomplete="new-password"
-                                    >
-                                    <label for="password_confirmation" class="absolute left-4 top-3 text-gray-400 pointer-events-none">Confirm Password</label>
-                                </div>
-
-                                <label class="flex items-center text-sm text-gray-400">
-                                    <input type="checkbox" name="terms" class="mr-2 rounded border-gray-600 bg-gray-800 text-blue-500 focus:ring-blue-500" required {{ old('terms') ? 'checked' : '' }}>
-                                    I agree to the <a href="#" class="text-blue-400 hover:text-blue-300">Terms of Service</a> and <a href="#" class="text-blue-400 hover:text-blue-300">Privacy Policy</a>
-                                </label>
-
-                                <button type="submit" class="ripple-effect w-full py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105">
-                                    <span class="flex items-center justify-center">
-                                        <i class="fas fa-user-plus mr-2"></i>
-                                        Create Account
-                                    </span>
-                                </button>
-                            </form>
-
-                            <div class="text-center mt-6">
-                                <p class="text-gray-400">Already have an account? 
-                                    <button onclick="flipCard()" class="text-blue-400 hover:text-blue-300 transition-colors font-semibold">Sign in</button>
-                                </p>
-                            </div>
+                    {{-- Pop-up Notifikasi Error Login dari Laravel akan muncul di sini --}}
+                    @if (session('status'))
+                        <div class="session-status success slide-in" style="animation-delay: 0.05s;">
+                            {{ session('status') }}
                         </div>
+                    @endif
+                    @if ($errors->any())
+                        <div class="session-status error slide-in" style="animation-delay: 0.05s;">
+                            {{ __('Whoops! Something went wrong.') }}
+                            <ul class="mt-3 list-disc list-inside text-sm">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form id="loginForm" method="POST" action="{{ route('login') }}" class="space-y-6">
+                        @csrf
+
+                        <div>
+                            <x-input-label for="email" :value="__('Email')" />
+                            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+                            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                        </div>
+
+                        <div class="mt-4">
+                            <x-input-label for="password" :value="__('Password')" />
+                            <x-text-input id="password" class="block mt-1 w-full"
+                                          type="password"
+                                          name="password"
+                                          required autocomplete="current-password" />
+                            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                        </div>
+
+                        <div class="flex items-center justify-between slide-in remember-me-group" style="animation-delay: 0.4s;">
+                            <label class="flex items-center text-sm text-gray-400">
+                                <input id="remember_me" type="checkbox" name="remember" class="mr-2 rounded border-gray-600 bg-gray-800 text-purple-500 focus:ring-purple-500" {{ old('remember') ? 'checked' : '' }}>
+                                Remember me
+                            </label>
+                            @if (Route::has('password.request'))
+                                <a href="{{ route('password.request') }}" class="text-sm text-purple-400 hover:text-purple-300 transition-colors">Forgot password?</a>
+                            @endif
+                        </div>
+
+                        <button type="submit" class="ripple-effect w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 slide-in" style="animation-delay: 0.5s;">
+                            <span class="flex items-center justify-center">
+                                Sign In
+                            </span>
+                        </button>
+                    </form>
+                    
                     </div>
-                </div>
             </div>
         </div>
     </div>
@@ -462,124 +262,14 @@
     <div id="messageContainer" class="fixed top-4 right-4 z-50"></div>
 
     <script>
-        // Pastikan kelas ini ada di JavaScript, karena digunakan oleh event listener
-        // Jika Anda sudah punya file JS terpisah, masukkan ini di sana
+        // JavaScript telah disederhanakan secara signifikan
         class AuthForm {
             constructor() {
-                this.isFlipped = false;
-                this.init();
                 this.createParticles();
             }
 
-            init() {
-                this.bindEvents();
-                this.startParticleAnimation();
-                this.checkFormStateOnLoad(); // Tambahan untuk cek status form saat load
-            }
-
-            // Fungsi untuk menampilkan pesan dari Laravel
-            showLaravelMessages() {
-                const messageContainer = document.getElementById('messageContainer');
-                if (!messageContainer) return;
-
-                // Cek untuk session status (success message)
-                const sessionStatus = @json(session('status'));
-                if (sessionStatus) {
-                    this.showMessage(sessionStatus, 'success');
-                }
-
-                // Cek untuk error validasi dari Laravel
-                const errors = @json($errors->all());
-                if (errors.length > 0) {
-                    let errorMessage = 'Whoops! Something went wrong.';
-                    if (errors.length === 1) {
-                        errorMessage = errors[0];
-                    } else {
-                        errorMessage += '<ul class="mt-1 list-disc list-inside text-sm">' + errors.map(e => `<li>${e}</li>`).join('') + '</ul>';
-                    }
-                    this.showMessage(errorMessage, 'error');
-
-                    // Jika ada error, pastikan form yang relevan terlihat
-                    if (@json($errors->has('name') || $errors->has('email') || $errors->has('password') || $errors->has('password_confirmation'))) {
-                        // Jika ada error pada register form, flip ke register
-                        if (document.getElementById('formCard').classList.contains('flipped') === false) {
-                             flipCard(); // Flip jika ada error register dan form di depan adalah login
-                        }
-                    }
-                }
-            }
-            
-            // Tambahan untuk cek apakah form harus di-flip saat halaman dimuat
-            checkFormStateOnLoad() {
-                // Asumsi jika ada old input untuk 'name' atau error 'name'/'password_confirmation',
-                // maka itu adalah hasil submit registrasi yang gagal.
-                const isRegisterError = @json(old('name') || $errors->has('name') || $errors->has('password_confirmation') || $errors->register->any());
-                const formCard = document.getElementById('formCard');
-
-                if (isRegisterError && !formCard.classList.contains('flipped')) {
-                    formCard.classList.add('flipped');
-                }
-            }
-
-
-            bindEvents() {
-                // Kita tidak lagi menyadap submit form karena Laravel akan menanganinya
-                // document.getElementById('loginForm').addEventListener('submit', this.handleLogin.bind(this));
-                // document.getElementById('registerFormBackend').addEventListener('submit', this.handleRegister.bind(this)); // Ubah id
-
-                // Add social login handlers
-                document.querySelectorAll('.social-btn').forEach(btn => {
-                    btn.addEventListener('click', this.handleSocialLogin.bind(this));
-                });
-            }
-
-            // Fungsi ini tidak lagi digunakan untuk submit form Laravel
-            // async handleLogin(e) { /* ... */ }
-            // async handleRegister(e) { /* ... */ }
-
-            handleSocialLogin(e) {
-                const platform = this.getSocialPlatform(e.currentTarget);
-                this.showMessage(`Redirecting to ${platform}...`, 'info');
-                
-                // Simulate social login redirect
-                setTimeout(() => {
-                    this.showMessage(`${platform} login completed!`, 'success');
-                }, 2000);
-            }
-
-            getSocialPlatform(button) {
-                const icon = button.querySelector('i');
-                if (icon.classList.contains('fa-google')) return 'Google';
-                if (icon.classList.contains('fa-github')) return 'GitHub';
-                if (icon.classList.contains('fa-facebook')) return 'Facebook';
-                if (icon.classList.contains('fa-twitter')) return 'Twitter';
-                return 'Social Platform';
-            }
-
-            // Fungsi show/hideLoading bisa tetap digunakan jika Anda ingin visual loading saat submit
-            // Tapi Laravel akan melakukan reload halaman, jadi ini mungkin tidak terlalu terlihat.
-            showLoading(button) {
-                const originalContent = button.innerHTML;
-                button.innerHTML = '<i class="fas fa-spinner loading mr-2"></i>Processing...';
-                button.disabled = true;
-                button.dataset.originalContent = originalContent;
-            }
-
-            hideLoading(button) {
-                if (button.dataset.originalContent) { // Pastikan ada originalContent
-                    button.innerHTML = button.dataset.originalContent;
-                }
-                button.disabled = false;
-            }
-
-            simulateApiCall() {
-                return new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                        Math.random() > 0.2 ? resolve() : reject();
-                    }, 1500);
-                });
-            }
-
+            // Fungsi ini tidak lagi diperlukan karena notifikasi error sudah ditangani oleh Blade di dalam form
+            // Anda bisa menggunakan ini untuk notifikasi lain jika perlu.
             showMessage(message, type) {
                 const messageEl = document.createElement('div');
                 messageEl.className = `p-4 rounded-lg mb-4 text-white slide-in ${
@@ -595,7 +285,6 @@
                         ${message}
                     </div>
                 `;
-
                 document.getElementById('messageContainer').appendChild(messageEl);
 
                 setTimeout(() => {
@@ -605,55 +294,30 @@
 
             createParticles() {
                 const container = document.getElementById('particles-container');
+                if (!container) return;
                 
-                // Mengurangi frekuensi partikel agar tidak terlalu banyak
                 setInterval(() => {
                     const particle = document.createElement('div');
                     particle.className = 'particle absolute w-1 h-1 bg-white/30 rounded-full';
                     particle.style.left = Math.random() * 100 + '%';
                     particle.style.animationDelay = Math.random() * 2 + 's';
-                    
                     container.appendChild(particle);
                     
                     setTimeout(() => {
                         particle.remove();
                     }, 6000);
-                }, 500); // Ganti dari 300ms ke 500ms
-            }
-
-            startParticleAnimation() {
-                // Additional particle effects can be added here
+                }, 500);
             }
         }
 
-        // Global functions (dapat diakses langsung di HTML onclick)
-        function flipCard() {
-            const formCard = document.getElementById('formCard');
-            formCard.classList.toggle('flipped');
-        }
-
-        function togglePassword(inputId) {
-            const input = document.getElementById(inputId);
-            const icon = document.getElementById(inputId + 'Icon');
-            
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                input.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
-        }
-
-        // Initialize the form when DOM is loaded
+        // DIHAPUS: Fungsi flipCard() dan togglePassword() tidak lagi diperlukan.
+        
         document.addEventListener('DOMContentLoaded', () => {
             const authForm = new AuthForm();
-            authForm.showLaravelMessages(); // Panggil fungsi untuk menampilkan pesan Laravel
+            // DIHAPUS: Logika untuk mengecek error register dan membalik kartu saat load.
         });
 
-        // Add some interactive effects
+        // Efek interaktif mouse tetap dipertahankan
         document.addEventListener('mousemove', (e) => {
             const mouseX = e.clientX / window.innerWidth;
             const mouseY = e.clientY / window.innerHeight;

@@ -1,115 +1,108 @@
 <x-app-layout>
-    <div class="py-12">
+    <div class="py-6 md:py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+            {{-- Form Filter Tanggal --}}
+            <div class="bg-white overflow-hidden shadow-sm rounded-lg mb-6 mx-4 sm:mx-0">
                 {{-- Card Header --}}
                 <div class="px-6 py-4 bg-white border-b border-gray-200">
                     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                         {{ __('Laporan Penjualan') }}
                     </h2>
                 </div>
-
-                {{-- Card Body --}}
-                <div class="p-6 bg-white">
-
-                    {{-- Filter Section --}}
-                    <div class="mb-6 p-4 bg-gray-50 rounded-lg">
-                        <form action="{{ route('admin.reports.index') }}" method="GET" class="space-y-4">
-                            {{-- FIX: Adjusted grid for better tablet and desktop alignment --}}
-                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
-                                <div>
-                                    <label for="start_date" class="block text-sm font-medium text-gray-700">Dari Tanggal:</label>
-                                    <input type="date" id="start_date" name="start_date" value="{{ $startDate }}"
-                                           class="mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
-                                </div>
-                                <div>
-                                    <label for="end_date" class="block text-sm font-medium text-gray-700">Sampai Tanggal:</label>
-                                    <input type="date" id="end_date" name="end_date" value="{{ $endDate }}"
-                                           class="mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
-                                </div>
-                                
-                                {{-- Spacer to push buttons to the right on large screens --}}
-                                <div class="hidden lg:block lg:col-span-1"></div>
-
-                                {{-- FIX: Button container adjustments for responsiveness --}}
-                                <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 sm:col-span-2 lg:col-span-2 sm:justify-end">
-                                    <button type="submit" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">
-                                        Filter
-                                    </button>
-                                    <a href="{{ route('admin.reports.daily', ['date' => $endDate]) }}"
-                                       class="w-full sm:w-auto text-center bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">
-                                        Laporan Harian
-                                    </a>
-                                </div>
+                <div class="p-6 bg-white border-b border-gray-200">
+                    <form action="{{ route('admin.reports.index') }}" method="GET">
+                        <div class="flex flex-col md:flex-row md:items-end md:space-x-4 space-y-4 md:space-y-0">
+                            <div class="flex-1">
+                                <label for="start_date" class="block text-sm font-medium text-gray-700">Tanggal
+                                    Mulai</label>
+                                <input type="date" name="start_date" id="start_date" value="{{ $startDate }}"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
                             </div>
-                        </form>
-                    </div>
+                            <div class="flex-1">
+                                <label for="end_date" class="block text-sm font-medium text-gray-700">Tanggal
+                                    Selesai</label>
+                                <input type="date" name="end_date" id="end_date" value="{{ $endDate }}"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                            </div>
+                            <div class="flex flex-col sm:flex-row sm:space-x-2 w-full md:w-auto space-y-2 sm:space-y-0">
+                                <button type="submit"
+                                    class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                                    Tampilkan
+                                </button>
+                                <a href="{{ route('admin.reports.index', ['start_date' => $startDate, 'end_date' => $endDate, 'print' => 1]) }}"
+                                    target="_blank"
+                                    class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                                    Cetak
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
 
-                    {{-- Summary Cards --}}
-                    <div class="mb-8">
-                        <h3 class="text-xl font-semibold mb-4 text-center">{{ __('Ringkasan Penjualan') }}</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div class="bg-indigo-50 p-6 rounded-lg shadow-md text-center">
-                                <p class="text-sm text-indigo-700 font-medium">{{ __('Total Penjualan Bersih') }}</p>
-                                <p class="text-3xl font-bold text-indigo-800 mt-2">Rp {{ number_format($totalSales, 0, ',', '.') }}</p>
-                            </div>
-                            <div class="bg-blue-50 p-6 rounded-lg shadow-md text-center">
-                                <p class="text-sm text-blue-700 font-medium">{{ __('Jumlah Pesanan Selesai') }}</p>
-                                <p class="text-3xl font-bold text-blue-800 mt-2">{{ $totalOrders }}</p>
-                            </div>
-                            <div class="bg-green-50 p-6 rounded-lg shadow-md text-center">
-                                <p class="text-sm text-green-700 font-medium">{{ __('Rata-rata Per Pesanan') }}</p>
-                                <p class="text-3xl font-bold text-green-800 mt-2">
-                                    Rp {{ number_format($totalOrders > 0 ? $totalSales / $totalOrders : 0, 0, ',', '.') }}
-                                </p>
-                            </div>
+            {{-- Area Hasil Laporan --}}
+            <div class="bg-white overflow-hidden shadow-sm rounded-lg mx-4 sm:mx-0">
+                <div class="p-4 sm:p-6 bg-white">
+                    {{-- Ringkasan Data --}}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-center mb-8">
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <p class="text-sm font-medium text-blue-600">Total Pendapatan</p>
+                            <p class="mt-1 text-xl sm:text-2xl font-bold text-blue-800">Rp
+                                {{ number_format($totalRevenue, 0, ',', '.') }}</p>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <p class="text-sm font-medium text-green-600">Total Transaksi</p>
+                            <p class="mt-1 text-xl sm:text-2xl font-bold text-green-800">{{ $totalTransactions }}</p>
+                        </div>
+                        <div class="bg-yellow-50 p-4 rounded-lg sm:col-span-2 lg:col-span-1">
+                            <p class="text-sm font-medium text-yellow-600">Total Item Terjual</p>
+                            <p class="mt-1 text-xl sm:text-2xl font-bold text-yellow-800">{{ $totalItemsSold }}</p>
                         </div>
                     </div>
 
-
-                    {{-- Top Selling Items Table --}}
-                    <div class="pt-6 border-t">
-                        <h3 class="text-xl font-semibold mb-4">{{ __('5 Menu Terlaris') }}</h3>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
+                    {{-- Tabel Detail Transaksi --}}
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Detail
+                                        Transaksi</th>
+                                    <th
+                                        class="hidden md:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                        Tipe</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Total
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @forelse ($orders as $order)
                                     <tr>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Nama Menu
-                                        </th>
-                                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Jumlah Terjual
-                                        </th>
-                                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Total Pendapatan
-                                        </th>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <div class="font-medium text-gray-900">
+                                                {{ $order->created_at->isoFormat('D MMM Y, HH:mm') }}</div>
+                                            <div class="text-gray-500">
+                                                <span class="font-mono">#{{ $order->id }}</span> -
+                                                <span>{{ $order->user->name ?? 'N/A' }}</span>
+                                                <span
+                                                    class="md:hidden">({{ str_replace('_', ' ', Str::title($order->order_type)) }})</span>
+                                            </div>
+                                        </td>
+                                        <td
+                                            class="hidden md:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                            {{ str_replace('_', ' ', Str::title($order->order_type)) }}</td>
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium text-gray-900">
+                                            Rp {{ number_format($order->total_amount, 0, ',', '.') }}</td>
                                     </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    @forelse ($topSellingMenuItems as $menu)
-                                        <tr>
-                                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
-                                                {{ $menu->name }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-gray-700 text-right">
-                                                {{ $menu->total_quantity_sold }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-gray-700 text-right">
-                                                Rp {{ number_format($menu->total_revenue, 0, ',', '.') }}
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="3" class="px-6 py-4 whitespace-nowrap text-center text-gray-500">
-                                                Tidak ada data menu terlaris untuk periode ini.
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
+                                @empty
+                                    <tr>
+                                        <td colspan="3" class="text-center py-8 text-gray-500">Tidak ada data
+                                            penjualan pada periode ini.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
-                    
                 </div>
             </div>
         </div>

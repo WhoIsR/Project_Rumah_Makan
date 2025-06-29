@@ -38,7 +38,7 @@ class MenuItemController extends Controller
             'category_id' => 'nullable|exists:categories,id', // Diubah jadi nullable, jadi tidak wajib
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
             'item_ingredients' => 'nullable|array',
             'item_ingredients.*.id' => 'required_with:item_ingredients|exists:ingredients,id',
             'item_ingredients.*.quantity' => 'required_with:item_ingredients|integer|min:1',
@@ -95,7 +95,7 @@ class MenuItemController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240', // 10MB max
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
             'remove_existing_image' => 'boolean', // Ini adalah input hidden yang baru
             'item_ingredients' => 'nullable|array',
             'item_ingredients.*.id' => 'required_with:item_ingredients|exists:ingredients,id',

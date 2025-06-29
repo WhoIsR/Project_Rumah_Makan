@@ -15,9 +15,8 @@ class CategoryController extends Controller
     public function index()
     {
         // Ambil semua data kategori, plus hitung berapa banyak menu di tiap kategori
-        $categories = Category::withCount('menuItems')->latest()->paginate(10);
+        $categories = Category::withCount('menuItems')->orderBy('name')->paginate(10);
 
-        // Tampilkan halaman 'index.blade.php' dan kirim data categories ke sana
         return view('admin.categories.index', compact('categories'));
     }
 

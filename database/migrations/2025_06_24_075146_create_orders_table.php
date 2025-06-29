@@ -18,8 +18,13 @@ return new class extends Migration
             $table->decimal('paid_amount', 10, 2)->nullable();
             $table->decimal('change_amount', 10, 2)->nullable();
             $table->string('status')->default('pending'); // e.g., pending, completed, cancelled
-            $table->string('order_type')->nullable(); // e.g., dine_in, take_away, delivery
-            $table->string('table_number')->nullable();
+
+            // Kolom yang disempurnakan
+            $table->enum('order_type', ['Makan di Tempat', 'Bawa Pulang', 'di Antar']);
+            $table->string('customer_name')->nullable();
+            $table->string('customer_phone')->nullable();
+            $table->text('customer_address')->nullable();
+            
             $table->timestamps();
         });
     }

@@ -12,16 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('menu_item_ingredients', function (Blueprint $table) {
-            $table->id();
+            // Kunci utama gabungan untuk mencegah duplikasi
+            $table->primary(['menu_item_id', 'ingredient_id']);
+
+            // Foreign key ke tabel menu_items
             $table->foreignId('menu_item_id')->constrained()->onDelete('cascade');
+
+            // Foreign key ke tabel ingredients
             $table->foreignId('ingredient_id')->constrained()->onDelete('cascade');
-            $table->integer('quantity_needed');
-            $table->timestamps(); // Opsional
-            // Pastikan tidak ada duplikat menu_item_id dan ingredient_id
-            $table->unique(['menu_item_id', 'ingredient_id']);
+
+            // Kolom untuk menyimpan jumlah bahan yang dibutuhkan
+            $table->decimal('quantity_needed', 10, 2);
+
+            $table->timestamps();
         });
     }
-
 
     /**
      * Reverse the migrations.

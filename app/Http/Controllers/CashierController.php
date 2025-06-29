@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers; // Perhatikan namespace Anda, di sini saya asumsikan App\Http\Controllers
 
 use App\Models\Category;
 use App\Models\MenuItem;
@@ -8,7 +8,8 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log; // Import untuk logging
+use Illuminate\Support\Facades\Log;
+use Exception;
 
 class CashierController extends Controller
 {
@@ -17,89 +18,91 @@ class CashierController extends Controller
      */
     public function index()
     {
-        // Ambil semua kategori dengan menu item-nya (jika perlu ditampilkan)
         $categories = Category::with('menuItems')->get();
-
-        // Ambil semua menu item (untuk daftar lengkap)
         $menuItems = MenuItem::all();
-
         return view('admin.kasir.index', compact('categories', 'menuItems'));
     }
 
     /**
-     * Memproses pesanan dari kasir.
+     * Memproses pesanan baru.
      */
     public function placeOrder(Request $request)
     {
         $request->validate([
-            'items' => 'required|array|min:1', // Harus ada minimal 1 item
+            'items' => 'required|array|min:1',
             'items.*.menu_item_id' => 'required|exists:menu_items,id',
             'items.*.quantity' => 'required|integer|min:1',
-            'paid_amount' => 'required|numeric|min:0', // Jumlah yang dibayarkan pelanggan
-            'order_type' => 'nullable|string|in:dine_in,take_away,delivery',
-            'table_number' => 'nullable|string|max:255',
+            'paid_amount' => 'required|numeric|min:0',
+            // PERUBAHAN DI SINI: Hapus 'delivery' dari aturan validasi
+            'order_type' => 'nullable|string|in:Makan di Tempat,Bawa Pulang',
         ]);
 
-        DB::beginTransaction(); // Mulai transaksi database
+        DB::beginTransaction();
         try {
             $totalAmount = 0;
             $orderItemsData = [];
 
-            // Hitung total dan siapkan data order items
+            // Langkah 1: Validasi semua item dan stok SEBELUM melakukan apapun
             foreach ($request->items as $item) {
-                $menuItem = MenuItem::findOrFail($item['menu_item_id']);
+                $menuItem = MenuItem::with('ingredients')->find($item['menu_item_id']);
+
+                if (!$menuItem) {
+                    throw new Exception("Menu item dengan ID {$item['menu_item_id']} tidak ditemukan.");
+                }
+
+                if ($menuItem->ingredients->isEmpty()) {
+                    throw new Exception("Resep untuk menu '{$menuItem->name}' belum diatur. Silakan atur resep terlebih dahulu.");
+                }
+
+                foreach ($menuItem->ingredients as $ingredient) {
+                    $quantityNeeded = $ingredient->pivot->quantity_needed * $item['quantity'];
+                    if ($ingredient->stock < $quantityNeeded) {
+                        $unitSymbol = $ingredient->baseUnit->symbol ?? 'unit';
+                        throw new Exception("Stok {$ingredient->name} tidak mencukupi. Dibutuhkan {$quantityNeeded} {$unitSymbol}, hanya tersedia {$ingredient->stock} {$unitSymbol}.");
+                    }
+                }
+
                 $subtotal = $menuItem->price * $item['quantity'];
                 $totalAmount += $subtotal;
-
                 $orderItemsData[] = [
                     'menu_item_id' => $menuItem->id,
                     'quantity' => $item['quantity'],
-                    'price' => $menuItem->price, // Harga menu saat pesanan dibuat
+                    'price' => $menuItem->price,
                     'subtotal' => $subtotal,
                 ];
             }
 
-            // Validasi jumlah pembayaran
+            // Langkah 2: Validasi pembayaran
             $paidAmount = $request->input('paid_amount');
             if ($paidAmount < $totalAmount) {
-                DB::rollBack();
-                return response()->json(['message' => 'Jumlah pembayaran kurang dari total tagihan.'], 422); // Unprocessable Entity
+                throw new Exception('Jumlah pembayaran kurang dari total tagihan.');
             }
             $changeAmount = $paidAmount - $totalAmount;
 
-            // Buat Order baru
+            // Langkah 3: Buat Order utama
             $order = Order::create([
-                'user_id' => Auth::id(), // Kasir yang sedang login
+                'user_id' => Auth::id(),
                 'total_amount' => $totalAmount,
                 'paid_amount' => $paidAmount,
                 'change_amount' => $changeAmount,
-                'status' => 'completed', // Langsung completed, atau 'pending' jika ada proses dapur
+                'status' => 'completed',
                 'order_type' => $request->order_type,
-                'table_number' => $request->table_number,
             ]);
 
-            // Simpan Order Items
+            // Langkah 4: Simpan Order Items dan kurangi stok
             foreach ($orderItemsData as $itemData) {
                 $order->items()->create($itemData);
 
-                // --- INTEGRASI PENGURANGAN STOK BAHAN BAKU (NOMOR 2 DARI LIST AWAL) ---
-                // Pastikan MenuItem memiliki relasi ingredients dan ingredients memiliki pivot quantity_needed
-                // Ini adalah LOGIKA PENGURANGAN STOK
-                $menuItem = MenuItem::with('ingredients')->find($itemData['menu_item_id']);
+                $menuItem = MenuItem::find($itemData['menu_item_id']);
+                // Pastikan relasi ingredients dimuat untuk menuItem ini
+                $menuItem->load('ingredients'); 
                 foreach ($menuItem->ingredients as $ingredient) {
                     $quantityNeeded = $ingredient->pivot->quantity_needed * $itemData['quantity'];
-                    if ($ingredient->stock < $quantityNeeded) {
-                        DB::rollBack();
-                        // Jika ada kekurangan stok, batalkan seluruh transaksi
-                        return response()->json(['message' => 'Stok ' . $ingredient->name . ' tidak mencukupi. Hanya tersedia ' . $ingredient->stock . ' ' . $ingredient->unit . ' dibutuhkan ' . $quantityNeeded . ' ' . $ingredient->unit], 400);
-                    }
-                    $ingredient->stock -= $quantityNeeded;
-                    $ingredient->save();
+                    $ingredient->decrement('stock', $quantityNeeded);
                 }
-                // --- AKHIR INTEGRASI PENGURANGAN STOK ---
             }
 
-            DB::commit(); // Komit transaksi jika semua berhasil
+            DB::commit();
 
             return response()->json([
                 'message' => 'Pesanan berhasil dicatat!',
@@ -109,32 +112,34 @@ class CashierController extends Controller
             ], 200);
 
         } catch (\Exception $e) {
-            DB::rollBack(); // Rollback transaksi jika terjadi kesalahan
-            Log::error('Error placing order: ' . $e->getMessage()); // Catat error ke log
-            return response()->json(['message' => 'Gagal mencatat pesanan. Silakan coba lagi.'], 500);
+            DB::rollBack();
+            Log::error('Error placing order: ' . $e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
-    // Kamu bisa menambahkan method lain untuk melihat riwayat transaksi, dll.
     public function history()
     {
         $orders = Order::with('user', 'items.menuItem')
-                        ->where('user_id', Auth::id()) // Hanya pesanan kasir yang sedang login
                         ->orderByDesc('created_at')
                         ->paginate(10);
-
         return view('admin.kasir.history', compact('orders'));
     }
 
     public function showOrder(Order $order)
     {
-        // Pastikan kasir yang login adalah yang membuat order ini, atau admin
-        if (Auth::user()->role === 'cashier' && $order->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
-        }
-
-        $order->load('user', 'items.menuItem'); // Load relasi
-
+        $order->load('user', 'items.menuItem'); 
         return view('admin.kasir.show', compact('order'));
+    }
+
+    /**
+     * Menampilkan halaman struk untuk dicetak.
+     */
+    public function printReceipt(Order $order)
+    {
+        // Eager load relasi yang dibutuhkan untuk struk
+        $order->load('user', 'items.menuItem');
+        
+        return view('admin.kasir.receipt', compact('order'));
     }
 }

@@ -1,0 +1,73 @@
+services:
+  # ─── Application ─────────────────────────────────────────────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      # Persist uploaded files and logs
+      - storage_data:/var/www/html/storage/app/public
+      - logs_data:/var/www/html/storage/logs
+    ports:
+      - "${APP_PORT:-80}:80"
+    networks:
+      - app_network
+
+  # ─── MySQL ───────────────────────────────────────────────────────────────────
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-rumah_makan}
+      MYSQL_USER: ${DB_USERNAME:-laravel}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootsecret}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app_network
+
+  # ─── Backup (optional: daily database dump) ───────────────────────────────────
+  db-backup:
+    image: fradelg/mysql-cron-backup
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      MYSQL_HOST: db
+      MYSQL_DB: ${DB_DATABASE:-rumah_makan}
+      MYSQL_USER: ${DB_USERNAME:-laravel}
+      MYSQL_PASS: ${DB_PASSWORD:-secret}
+      MAX_BACKUPS: 7
+      CRON_TIME: "0 2 * * *"   # 2 AM every day
+    volumes:
+      - db_backups:/backup
+    networks:
+      - app_network
+
+volumes:
+  db_data:
+  storage_data:
+  logs_data:
+  db_backups:
+
+networks:
+  app_network:
+    driver: bridge

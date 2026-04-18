@@ -73,8 +73,10 @@ php artisan event:cache
 php artisan storage:link
 
 # ─── 7. Maintenance mode + migrations ────────────────────────────────────────
-# Use the 'down' token so the old release still serves the 503 page
-php artisan down --retry=15 --secret="deploy-$(date +%s)" 2>/dev/null || true
+# Capture the secret so you can bypass the 503 page during debugging
+MAINT_SECRET="deploy-$(date +%s)"
+php artisan down --retry=15 --secret="$MAINT_SECRET" 2>/dev/null || true
+echo "ℹ  Maintenance bypass secret: $MAINT_SECRET"
 
 php artisan migrate --force
 

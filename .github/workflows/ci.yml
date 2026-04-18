@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: ["main"]
 
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -62,19 +65,30 @@ jobs:
         run: npm run build
 
       # ─── App setup ─────────────────────────────────────────────────────────
-      - name: Copy .env.testing
-        run: cp .env.example .env.testing
-
-      - name: Set environment variables for testing
+      - name: Create .env.testing
         run: |
-          echo "APP_ENV=testing" >> .env.testing
-          echo "APP_KEY=" >> .env.testing
-          echo "DB_CONNECTION=mysql" >> .env.testing
-          echo "DB_HOST=127.0.0.1" >> .env.testing
-          echo "DB_PORT=3306" >> .env.testing
-          echo "DB_DATABASE=rumah_makan_test" >> .env.testing
-          echo "DB_USERNAME=laravel" >> .env.testing
-          echo "DB_PASSWORD=secret" >> .env.testing
+          cat > .env.testing <<'EOF'
+          APP_NAME="Rumah Makan"
+          APP_ENV=testing
+          APP_KEY=
+          APP_DEBUG=true
+          APP_URL=http://localhost
+
+          LOG_CHANNEL=stack
+          LOG_LEVEL=debug
+
+          DB_CONNECTION=mysql
+          DB_HOST=127.0.0.1
+          DB_PORT=3306
+          DB_DATABASE=rumah_makan_test
+          DB_USERNAME=laravel
+          DB_PASSWORD=secret
+
+          SESSION_DRIVER=array
+          QUEUE_CONNECTION=sync
+          CACHE_STORE=array
+          MAIL_MAILER=array
+          EOF
 
       - name: Generate application key
         run: php artisan key:generate --env=testing
